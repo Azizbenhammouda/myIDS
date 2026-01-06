@@ -47,7 +47,7 @@ def packet_exec(packet):
 def start_sniffing(interface=None):
     sniff(iface=interface, prn=packet_exec, store=False)
 if __name__ == "__main__":
-    print_banner
+    print_banner()
     print("Starting packet capture...")
     start_sniffing()
 
