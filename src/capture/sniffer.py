@@ -1,4 +1,4 @@
-from scapy.all import sniff,IP,TCP,UDP
+from scapy.all import sniff,IP,TCP,UDP,ICMP
 import time
 
 def print_banner():
@@ -35,10 +35,12 @@ def organize_packet(packet):
     packet_data["protocol"]="UDP"
     packet_data["port_src"]=packet[UDP].sport
     packet_data["port_dst"]=packet[UDP].dport
+  elif ICMP in packet:
+     packet_data["protocol"]="ICMP"
+     packet_data["port_src"]=packet[ICMP].sport
+     packet_data["port_dst"]=packet[ICMP].dport
   else:
-     packet_data["protocol"]="OTHER"
-
-  return packet_data
+   return packet_data
   
 def packet_exec(packet):
     organized=organize_packet(packet)
