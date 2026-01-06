@@ -4,11 +4,12 @@ import time
 def print_banner():
     banner = """
                                            
- #### #   # #   #   #     #   ##### ####  
-#     #   # #  ##  ###   ###  #     #   # 
-#     ##### # # # # # # # # # ####  ####  
-#     #   # ##  #  ###   ###  #     #     
- #### #   # #   #   #     #   ##### #       
+███████╗███╗   ██╗██╗███████╗███████╗
+██╔════╝████╗  ██║██║██╔════╝██╔════╝
+███████╗██╔██╗ ██║██║█████╗  █████╗  
+╚════██║██║╚██╗██║██║██╔══╝  ██╔══╝  
+███████║██║ ╚████║██║██║     ██║     
+╚══════╝╚═╝  ╚═══╝╚═╝╚═╝     ╚═╝      
     """
     print("\033[92m" + banner + "\033[0m")  # Green color
     print("\033[93m[*] Initializing packet capture engine...\033[0m")
@@ -37,10 +38,9 @@ def organize_packet(packet):
     packet_data["port_dst"]=packet[UDP].dport
   elif ICMP in packet:
      packet_data["protocol"]="ICMP"
-     packet_data["port_src"]=packet[ICMP].sport
-     packet_data["port_dst"]=packet[ICMP].dport
-  else:
-   return packet_data
+  return packet_data  
+  
+   
   
 def packet_exec(packet):
     organized=organize_packet(packet)
