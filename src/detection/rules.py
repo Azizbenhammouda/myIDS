@@ -1,19 +1,37 @@
-from collections import defaultdict
-from datetime import datetime, timedelta
+from src.detection.states import (
+    check_ssh_bruteforce,
+    check_port_scan
+)
+
+SUSPICIOUS_PORTS = {4444, 1337}
 
 
-connection_tracker=defaultdict(lambda:{"count":0,"last seen":None,"port":set()})
-failed_login_tracker=defaultdict(int)
+def analyze_packet(packet):
+   
+    alerts = []
 
-def track_connections(src_ip,port):
-      now=datetime.now()
-      tracker=connection_tracker[src_ip]
+    src_ip = packet["src_ip"]
+    dst_ip = packet["dst_ip"]
+    dst_port = packet["port_dst"]
+    protocol = packet["protocol"]
 
+    
+    if dst_port in SUSPICIOUS_PORTS:
+        alerts.append(
+            f"[ALERT] Suspicious port {dst_port} accessed "
+            f"{src_ip} -> {dst_ip}"
+        )
 
-def ssh_brute_force(packet):
-      alerts=[]
-      #possible SSH
-      if packet["dst_port"]==22:
-            return "[ALERT] Possible SSH access from"+received["src_ip"]+"->"+ received["dest_ip"]
-  
-      
+   
+    if check_ssh_bruteforce(src_ip, dst_port):
+        alerts.append(
+            f"[ALERT] Possible SSH brute force from {src_ip}"
+        )
+
+    
+    if check_port_scan(src_ip, dst_port):
+        alerts.append(
+            f"[ALERT] Possible port scan from {src_ip}"
+        )
+
+    return alerts

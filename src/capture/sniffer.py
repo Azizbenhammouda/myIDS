@@ -1,23 +1,7 @@
 from scapy.all import sniff,IP,TCP,UDP,ICMP
-import time
 
-def print_banner():
-    banner = """
-                                           
-███████╗███╗   ██╗██╗███████╗███████╗
-██╔════╝████╗  ██║██║██╔════╝██╔════╝
-███████╗██╔██╗ ██║██║█████╗  █████╗  
-╚════██║██║╚██╗██║██║██╔══╝  ██╔══╝  
-███████║██║ ╚████║██║██║     ██║     
-╚══════╝╚═╝  ╚═══╝╚═╝╚═╝     ╚═╝      
-    """
-    print("\033[92m" + banner + "\033[0m")  # Green color
-    print("\033[93m[*] Initializing packet capture engine...\033[0m")
-    time.sleep(1)
-    print("\033[93m[*] Loading network interfaces...\033[0m")
-    time.sleep(0.5)
-    print("\033[92m[✓] Ready to capture packets!\033[0m\n")
-    time.sleep(0.5)
+
+
 def organize_packet(packet):
   if IP not in packet:
     return None
@@ -47,9 +31,10 @@ def packet_exec(packet):
     if organized:
       print (organized)
 def start_sniffing(interface=None):
-    sniff(iface=interface, prn=packet_exec, store=False)
+    sniff(iface=interface,
+        prn=callback if callback else packet_exec,
+        store=False)
 if __name__ == "__main__":
-    print_banner()
     print("Starting packet capture...")
     start_sniffing()
 
